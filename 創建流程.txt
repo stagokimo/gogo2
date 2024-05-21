@@ -1,0 +1,96 @@
+[Vue3建立流程]
+[套件]
+01.Tailwind CSS IntelliSense
+02.Vue - Official
+
+[小常識]
+01.切換版本 nvm 
+02.生產環境 npm run build 
+
+[Vue3官網]
+https://cn.vuejs.org/guide/quick-start.html
+
+[Vue3建立]
+[01.終端機下指令，選擇完組件後，相關指令跑一遍]
+  npm create vue@latest
+  cd vue-project-c
+  npm install
+  npm run format
+  npm run dev  
+  
+------------------------------
+[Tailwind官網]
+https://tailwindcss.com/docs/installation
+https://hsuchihting.github.io/vue-js/20220130/1190658877/
+
+[Tailwind建立]
+[01.終端機下指令，再來就是要安裝 TailwindCSS 在專案中，輸入以下指令安裝]
+npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
+
+[02.終端機下指令，安裝完後再輸入下方指令建立 TailwindCSS 配置檔與 PostCSS 配置檔]
+npx tailwindcss init -p
+
+[03.改tailwind.config.js]
+03-1 如下：
+module.exports = {
+  content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+03-2 如下：
+export default {
+  content: ["./src/**/*.{vue,js,ts,jsx,tsx}"],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+------------------------------
+03-2 也可以ES模組修改如下：
+export const content = ["./src/**/*.{vue,js,ts,jsx,tsx}"];
+export const theme = {
+  extend: {},
+};
+export const plugins = [];
+
+[04.src資料夾裡面增加一個input.css，並且貼上]
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[05.main.js調整css]
+import '@/input.css'
+
+[06.app.vue調整測試]
+<template>
+  <div class="text-center bg-gray-100 p-5">
+    <p class="text-6xl text-red-700">Hello!</p>
+    <h1 class="text-4xl text-green-500">Vite + TailwindCSS</h1>
+  </div>
+</template>
+
+------------------------------
+[daisyUI 建立]
+[01.終端機下指令]
+npm i -D daisyui@latest
+
+[02.改tailwind.config.js]
+import daisyui from "daisyui"
+export default {
+  content: ["./src/**/*.{vue,js,ts,jsx,tsx}"],
+  theme: {
+    extend: {},
+  },
+  plugins: [daisyui],
+  daisyui: {
+    themes: ['light', 'dark', 'cupcake'],
+  },
+};
+
+[03.app.vue調整測試]
+<button class="btn btn-primary">Button</button>
+
+
+ 
