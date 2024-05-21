@@ -2,6 +2,7 @@
 [套件]
 01.Tailwind CSS IntelliSense
 02.Vue - Official
+03.postcss
 
 [小常識]
 01.切換版本 nvm 
@@ -91,6 +92,33 @@ export default {
 
 [03.app.vue調整測試]
 <button class="btn btn-primary">Button</button>
+
+------------------------------
+[安裝套件]
+01.axios (vue-axios)=> npm install axios vue-axios --save
+https://www.npmjs.com/package/vue-axios
+
+02.main.ts
+
+import '@/input.css'
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
+import App from './App.vue'
+import router from './router'
+
+const app = createApp(App)
+
+app.use(VueAxios, axios)
+
+app.use(createPinia())
+app.use(router)
+
+app.mount('#app')
+
 
 
  
