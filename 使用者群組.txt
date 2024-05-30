@@ -1,0 +1,100 @@
+設計一個網站功能，包括使用者（Users）、權限群組（Permissions）、角色群組（Roles），需要設計適當的資料表來管理這些實體及其關係。這裡將介紹一個基本的資料庫設計，包含四個主要表：users、roles、permissions 和 role_permissions。
+---------------------
+1. 資料表設計
+users 表
+users 表用於存儲用戶的基本信息。
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    role_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+---------------------
+roles 表
+roles 表用於存儲角色的基本信息。
+
+CREATE TABLE roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    description VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+---------------------
+permissions 表
+permissions 表用於存儲權限的基本信息。
+
+CREATE TABLE permissions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    description VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+---------------------
+2. 數據庫設計說明
+users 表：
+
+id: 用戶的唯一標識。
+username: 用戶名，唯一約束。
+password: 用戶密碼（存儲時應使用哈希處理）。
+email: 用戶電子郵件，唯一約束。
+role_id: 角色的外鍵，用於表示用戶的角色。
+created_at 和 updated_at: 創建和更新的時間戳。
+roles 表：
+
+id: 角色的唯一標識。
+name: 角色名，唯一約束。
+description: 角色的描述。
+created_at 和 updated_at: 創建和更新的時間戳。
+permissions 表：
+
+id: 權限的唯一標識。
+name: 權限名，唯一約束。
+description: 權限的描述。
+created_at 和 updated_at: 創建和更新的時間戳。
+role_permissions 表：
+
+role_id: 角色的外鍵，與 roles 表的 id 對應。
+permission_id: 權限的外鍵，與 permissions 表的 id 對應。
+---------------------
+3. 範例數據
+插入角色和權限
+
+INSERT INTO roles (name, description) VALUES ('admin', 'Administrator role');
+INSERT INTO roles (name, description) VALUES ('user', 'Regular user role');
+INSERT INTO permissions (name, description) VALUES ('view_users', 'Permission to view users');
+INSERT INTO permissions (name, description) VALUES ('edit_users', 'Permission to edit users');
+INSERT INTO permissions (name, description) VALUES ('delete_users', 'Permission to delete users');
+
+關聯角色和權限
+
+INSERT INTO role_permissions (role_id, permission_id) VALUES (1, 1);  -- Admin can view users
+INSERT INTO role_permissions (role_id, permission_id) VALUES (1, 2);  -- Admin can edit users
+INSERT INTO role_permissions (role_id, permission_id) VALUES (1, 3);  -- Admin can delete users
+INSERT INTO role_permissions (role_id, permission_id) VALUES (2, 1);  -- User can view users
+
+插入用戶
+INSERT INTO users (username, password, email, role_id) VALUES ('admin', 'hashed_password', 'admin@example.com', 1);
+INSERT INTO users (username, password, email, role_id) VALUES ('user1', 'hashed_password', 'user1@example.com', 2);
+---------------------
+4. 查詢用戶的權限
+可以使用聯接（JOIN）查詢用戶的角色和權限：
+
+SELECT u.username, r.name AS role_name, p.name AS permission_name
+FROM users u
+JOIN roles r ON u.role_id = r.id
+JOIN role_permissions rp ON r.id = rp.role_id
+JOIN permissions p ON rp.permission_id = p.id
+WHERE u.username = 'admin';
+
+
+
+
+
+
