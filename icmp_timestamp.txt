@@ -1,5 +1,6 @@
-netsh advfirewall firewall add rule name="Block ICMP Timestamp Request" protocol=icmpv4:13,icmpv6:13 dir=in action=block
-netsh advfirewall firewall add rule name="Block ICMP Timestamp Reply" protocol=icmpv4:14,icmpv6:14 dir=in action=block
+netsh advfirewall firewall add rule name="Block ICMP Timestamp Request" protocol=ICMPv4:13,ICMPv6:13 dir=in action=block
+netsh advfirewall firewall add rule name="Block ICMP Timestamp Reply" protocol=ICMPv4:14,ICMPv6:14 dir=in action=block
+
 
 在 Linux 系統上，永久關閉 ICMP Timestamp 回應並進行測試，您可以按照以下步驟進行操作。
 
