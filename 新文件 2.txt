@@ -1,0 +1,40 @@
+我在弄TFS包版指令
+
+顯示名稱
+mvn install
+工具
+c:\apache-maven3.8.1\bin\mvn
+引數
+-X -s c:\apache-maven-3.0.4\conf\loan-sit-settings.xml install
+
+如果我要profiles:sit，
+-X -s c:\apache-maven-3.0.4\conf\loan-sit-settings.xml install，要怎麼調整
+
+複製檔案
+將檔案複製到 ${build.artifactstagingdirectory}
+來源資料夾
+${(build.sourcesdirectory)\target}
+
+
+cp -r -Force weblogic/* dist/
+請問這個指令在TFS上，是要新增哪一種工作
+01.目標電腦上的PowerShell
+02.命令列 
+
+Copy-Item -Recurse -Force weblogic/* dist/ ，新增命令列，工具：？，引數：？
+
+KexAlgorithms
+Ciphers
+MACs
+
+避免 SSH weaken 與SSH server CBC
+給我KexAlgorithms、Ciphers、MACs
+
+# 密鑰交換算法
+KexAlgorithms diffie-hellman-group14-sha256,diffie-hellman-group-exchange-sha256,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256
+
+# 加密算法
+Ciphers aes256-ctr,aes192-ctr,aes128-ctr,aes256-gcm@openssh.com,aes128-gcm@openssh.com
+
+# 訊息認證碼
+MACs hmac-sha2-512,hmac-sha2-256
