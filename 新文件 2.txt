@@ -3,7 +3,7 @@
 顯示名稱
 mvn install
 工具
-c:\apache-maven3.8.1\bin\mvn
+c:\apache-maven3.8 .1\bin\mvn
 引數
 -X -s c:\apache-maven-3.0.4\conf\loan-sit-settings.xml install
 
