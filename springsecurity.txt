@@ -1,0 +1,99 @@
+
+（基於 Spring Boot 2.x 和 Spring Security 5.x）
+
+1.產生固定token
+登入成功之後會給予 token，每次呼叫api都需在header輸入Bearer  
+
+2.除了登入之外的 api都會在攔截器驗證 token
+
+
+
+//登入過濾
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable() // 禁用 CSRF，因為我們是基於 Token 的認證
+                .authorizeRequests()
+                .antMatchers("/User/**").permitAll() // 允許匿名訪問 "/user/**"
+                .anyRequest().authenticated()       // 其他路徑需要驗證
+                .and()
+                .addFilterBefore(new TokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class); // 添加自定義過濾器
+    }
+
+
+}
+
+//產生固定token
+    String generateToken() {
+        String SECRET_KEY ="BZDuw8k4sHCFTHVtAhUt2B7n657FHUHx2DQfVTcPpxD3yqGBwXSnD2enURrYXsQN";
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("name","SameRelation");
+        String jwt = Jwts.builder()
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .setClaims(map)
+                .compact();
+        System.out.println(jwt);
+
+
+
+        return jwt;
+    }
+
+//解析token 回傳為 "SameRelation"
+     Claims verifyToken(String token) {
+         String SECRET_KEY ="BZDuw8k4sHCFTHVtAhUt2B7n657FHUHx2DQfVTcPpxD3yqGBwXSnD2enURrYXsQN";
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
+
+    }
+	
+
+//過濾器
+public class TokenAuthenticationFilter extends OncePerRequestFilter {
+
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        System.out.println("asdsadasdasdasds");
+        // 從請求頭中獲取 Authorization
+        String authorizationHeader = request.getHeader("Authorization");
+
+        String authToken = request.getHeader("Authorization");
+        String headerPrefix = "Bearer ";
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring(7);
+            System.out.println("token: " +  token);
+            // 驗證 Token
+            if (validateToken(token)) {
+
+            }
+
+            if (token.equals("eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZ2V0In0.spmLkM7XyesVVkT7DCHBxH-XbpNTs2iKhClvHQf8AJc")) {
+                //有效token則繼續執行
+
+                return;
+            }
+        }
+
+        // 繼續執行後續過濾器
+        try {
+            filterChain.doFilter(request, response);
+        } catch (java.io.IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private boolean validateToken(String token) {
+        // 替換為實際的驗證邏輯，這裡只是示例
+        return "valid-token".equals(token);
+    }
+
+
+}	
+	
